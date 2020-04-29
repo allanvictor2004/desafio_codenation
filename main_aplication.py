@@ -17,19 +17,22 @@ import json, string #, requests
 # Lendo do arquivo answer.json:
 with open('./answer.json') as json_file:
 
-	alfabeto = list(string.ascii_lowercase)
-
 	json_data = json.load(json_file)
 
-	cifrado_content = json_data["cifrado"]
+	cifrado_content = json_data["cifrado"].lower()
+	numero_casas = json_data["numero_casas"]
+	alfabeto = list(string.ascii_lowercase)
 
-	cifrado_content = cifrado_content.lower()
-	print(cifrado_content)
-	print(alfabeto)
+	decifrado = ''
 
+	for i in cifrado_content:
+		if i in alfabeto:
+			pos = alfabeto.index(i) - numero_casas
+			decifrado += alfabeto[pos]
+		else:
+			decifrado += i
 
-
-
+	print(decifrado)
 
 # # Log da aplicação:
 # print(f'headers: {response.headers}')
