@@ -2,6 +2,8 @@
 # e salva a resposta em um arquivo answer.json.
 import json, string #, requests
 
+from hashlib import sha1
+
 # # Definindo a url da requisição, já com o token:
 # MEU_TOKEN = '8060997db46d1bdcf857a8c43638552bb10f0b02'
 # URL_DA_API = f'https://api.codenation.dev/v1/challenge/dev-ps/generate-data?token={MEU_TOKEN}'
@@ -15,7 +17,7 @@ import json, string #, requests
 # 	json.dump(json_data, json_file, indent=4)
 
 # Lendo do arquivo answer.json:
-with open('./answer.json') as json_file:
+with open('./answer.json', 'r') as json_file:
 
 	json_data = json.load(json_file)
 
@@ -32,8 +34,15 @@ with open('./answer.json') as json_file:
 		else:
 			decifrado += i
 
-	print(decifrado)
+	json_data["decifrado"] = decifrado
 
+	encoding = json_file.encoding
+	resumo_criptografico = sha1(decifrado.encode(encoding)).hexdigest()
+	json_data["resumo_criptografico"] = resumo_criptografico
+
+	print(json.dumps(json_data, indent=4))
+
+print(json_file.closed)
 # # Log da aplicação:
 # print(f'headers: {response.headers}')
 # print(f'status-code: {response.status_code}')
